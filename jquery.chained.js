@@ -16,7 +16,11 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
-    $.fn.chained = function(parent_selector) {
+    $.fn.chained = function(parent_selector, options) {
+        var settings = $.extend({
+            // These are the defaults.
+            default_value: ""
+        }, options );
 
         return this.each(function() {
 
@@ -79,13 +83,13 @@
                     if ($(this).hasClass(selected) && $(this).val() === currently_selected_value) {
                         $(this).prop("selected", true);
                         trigger_change = false;
-                    } else if (!$(this).hasClass(selected) && !$(this).hasClass(selected_first) && $(this).val() !== "") {
+                    } else if (!$(this).hasClass(selected) && !$(this).hasClass(selected_first) && $(this).val() !== settings.default_value) {
                         $(this).remove();
                     }
                 });
 
                 /* If we have only the default value disable select. */
-                if (1 === $("option", child).size() && $(child).val() === "") {
+                if (1 === $("option", child).size() && $(child).val() === settings.default_value) {
                     $(child).prop("disabled", true);
                 } else {
                     $(child).prop("disabled", false);
@@ -101,6 +105,8 @@
     $.fn.chainedTo = $.fn.chained;
 
     /* Default settings for plugin. */
-    $.fn.chained.defaults = {};
+    $.fn.chained.defaults = {
+        default_value: ""
+    };
 
 })(window.jQuery || window.Zepto, window, document);
